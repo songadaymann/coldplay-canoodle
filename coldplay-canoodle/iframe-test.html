@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Game Iframe Test - Mimics Rarible/OpenSea</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #121212;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .test-info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #888;
+        }
+        .iframe-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 2px solid #444;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background: #1e88e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #1976d2;
+        }
+        .sandbox-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        code {
+            background: #333;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 NFT Game Iframe Test</h1>
+        <div class="test-info">Testing iframe sandbox settings similar to NFT marketplaces</div>
+        
+        <div class="iframe-container">
+            <!-- Pinata gateway URL for GameJew Lives NFT game -->
+            <iframe 
+                id="gameFrame"
+                src="https://songaday.mypinata.cloud/ipfs/bafybeifmtdk7cfpaf6kna32rgzfqldoecmldyseisfrtzzhp5gjxcnkoby/"
+                sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
+                allow="autoplay; fullscreen"
+                loading="lazy"
+            ></iframe>
+        </div>
+        
+        <div class="controls">
+            <button onclick="testMinimal()">Test Minimal Sandbox</button>
+            <button onclick="testRarible()">Test Rarible-like</button>
+            <button onclick="testOpenSea()">Test OpenSea-like</button>
+            <button onclick="testFull()">Test Full Permissions</button>
+        </div>
+        
+        <div class="sandbox-info">
+            <strong>Current Sandbox:</strong> <code id="sandboxStatus">allow-scripts allow-same-origin allow-pointer-lock allow-forms</code>
+            <br><br>
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Save this HTML file and open it in your browser</li>
+                <li>Test different sandbox modes to see which breaks the video</li>
+                <li>Check browser console (F12) for any errors</li>
+                <li>Note which sandbox settings work vs break the video playback</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('gameFrame');
+        const status = document.getElementById('sandboxStatus');
+        
+        function updateSandbox(sandbox, allow) {
+            iframe.sandbox = sandbox;
+            if (allow) iframe.setAttribute('allow', allow);
+            status.textContent = sandbox + (allow ? ` | allow="${allow}"` : '');
+            iframe.src = iframe.src; // Reload
+        }
+        
+        function testMinimal() {
+            // Very restrictive - might break things
+            updateSandbox('allow-scripts', '');
+        }
+        
+        function testRarible() {
+            // Rarible-like permissions
+            updateSandbox('allow-scripts allow-same-origin allow-pointer-lock', 'autoplay');
+        }
+        
+        function testOpenSea() {
+            // OpenSea-like permissions
+            updateSandbox('allow-scripts allow-same-origin allow-pointer-lock allow-forms', 'autoplay; fullscreen');
+        }
+        
+        function testFull() {
+            // All permissions
+            updateSandbox('allow-scripts allow-same-origin allow-pointer-lock allow-forms allow-popups allow-modals', 'autoplay; fullscreen; camera; microphone');
+        }
+        
+        // Log any messages from the iframe
+        window.addEventListener('message', (e) => {
+            console.log('Message from iframe:', e.data);
+        });
+        
+        // Log any errors
+        window.addEventListener('error', (e) => {
+            console.error('Parent window error:', e);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find the Coldplay Canoodlers - Interactive NFT Game</title>
+    <meta name="description" content="An interactive kiss cam game where you search the crowd to find the target couple. Built with Phaser.js and optimized for web3." />
+    <style>
+        /* Import Press Start 2P font */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        /* Ensure the game canvas fills the container with no scrollbars */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Press Start 2P', monospace;
+        }
+        
+        /* Game container for iframe compatibility */
+        #game-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        /* Loading screen for better UX */
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            z-index: 1000;
+        }
+        
+        #loading-text {
+            font-size: 16px;
+            margin-top: 20px;
+            animation: pulse 1.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+        
+        /* Hide loading screen when game loads */
+        .game-loaded #loading-screen {
+            display: none;
+        }
+    </style>
+    <!-- Phaser 3 via CDN - using HTTPS for IPFS gateway compatibility -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div style="font-size: 24px;">FIND THE COLDPLAY</div>
+        <div style="font-size: 24px;">CANOODLERS!</div>
+        <div id="loading-text">Loading game...</div>
+    </div>
+    
+    <!-- Game container for iframe compatibility -->
+    <div id="game-container"></div>
+    
+    <!-- Game logic (separated for CSP compliance) -->
+    <script src="main.js"></script>
+    
+    <!-- mann.cool play tracking -->
+    <script>
+        fetch('https://mann.cool/api/plays', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: 'coldplay-canoodle', source: 'direct' }),
+        }).catch(() => {});
+    </script>
+</body>
+</html> 
